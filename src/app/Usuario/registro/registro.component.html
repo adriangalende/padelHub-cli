@@ -1,0 +1,32 @@
+<section id="registro" class="mb-5 mt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
+        <div class="card_registro">
+          <div class="card">
+            <div class="card-body text-center">
+              <form #formRegistro="ngForm" (ngSubmit)="onRegister(formRegistro)">
+                <h1 class="h3 mb-3 font-weight-normal" *ngIf="!isError">Alta usuario</h1>
+                <div class="form-group">
+                  <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Tu nombre" ngModel required>
+                </div>
+                <div class="form-group">
+                  <input type="email" id="email" name="email" class="form-control" placeholder="ejemplo@gmail.com" ngModel required>
+                </div>
+                <div class="form-group">
+                  <input type="text" id="telefono" name="telefono" class="form-control" placeholder="Tu número móvil" ngModel required>
+                </div>
+                <div class="form-group">
+                  <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" ngModel
+                    required>
+                </div>
+                <button type="submit" class="btn btn-lg btn-primary btn-block">Dame de alta!</button>
+                <p class="alert-registro alert hidden"></p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
