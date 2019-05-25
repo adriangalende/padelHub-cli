@@ -5,6 +5,7 @@ import { LoginComponent } from './Usuario/login/login.component';
 import {DashboardComponent} from './Dashboard/dashboard.component';
 import {RegistroComponent} from './Usuario/registro/registro.component';
 import { ClubComponent } from './Dashboard/club/club.component';
+import { BuscarPistaComponent } from './buscar-pista/buscar-pista.component';
 
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path:'registrar', component:RegistroComponent},
   {path:'dashboard', component:DashboardComponent},
   {path:'club', component:ClubComponent},
+  {path:'buscar', component: BuscarPistaComponent},
   {path:'**', redirectTo:'/login'}
 ];
 

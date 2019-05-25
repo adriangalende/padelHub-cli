@@ -1,7 +1,15 @@
 export class Pista{
     id:number;
-    nombre:String;
-    id_club:number;
-    id_tipo_pista:number;
-    carpeta_imagenes:String;
+    idPista?:number;
+    nombre?:String;
+    id_club?:number;
+    id_tipo_pista?:number;
+    carpeta_imagenes?:String;
+    club?:String;
+    horaInicio?:Date;
+    precio?:number;
+    precioLuz?:number;
+    tipoPista?:String;
+    rutaImagenes?:String;
+    duracion?:number;
 }

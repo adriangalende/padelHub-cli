@@ -1,0 +1,33 @@
+mat-card {
+  font-size: 64.5%;
+  font-weight: bold;
+  color: #2d2c2c;
+}
+
+#timepicker ngb-timepicker fieldset .ngb-tp .ngb-tp-spacer {
+  margin: 1rem;
+  color: red;
+}
+
+.btn-group-toggle {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  vertical-align: middle;
+  margin: 2rem;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.btn-group-toggle input {
+  display: none;
+  width: 60px;
+}
+
+.btn-group-toggle label label {
+  width: 50px;
+  margin: 0.4rem;
+}
+/*# sourceMappingURL=buscar-pista.component.css.map */

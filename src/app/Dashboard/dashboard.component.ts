@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
   
   redirigirUsuario(usr:JwtResponse):void{
     this.usuario = usr;
-    if(usr.role == "club"){
+    if(usr["role"] == "club"){
       this.esClub = true;
       this.esUsuario = false;
     } else {
