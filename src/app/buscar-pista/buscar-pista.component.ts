@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { Component, OnInit, Injectable, OnChanges, SimpleChanges, Input, Directive, Renderer, ElementRef } from '@angular/core';
 import { FormControl, Validators} from '@angular/forms';
 import {NgbTimeStruct, NgbTimeAdapter, NgbTimepickerConfig} from '@ng-bootstrap/ng-bootstrap';
 import { PeticionPartida } from '../Modelo/PeticionPartida';
@@ -7,6 +7,8 @@ import { PistasService } from '../Service/pistas.service';
 import { HttpClient } from '@angular/common/http';
 import { Pista } from '../Modelo/Pista';
 import { Router } from '@angular/router';
+import { ReservaService } from '../Service/reserva.service';
+import { AngularWaitBarrier } from 'blocking-proxy/built/lib/angular_wait_barrier';
 
 @Injectable()
 export class NgbTimeStringAdapter extends NgbTimeAdapter<string> {
@@ -41,7 +43,6 @@ export class NgbTimeStringAdapter extends NgbTimeAdapter<string> {
   }
 }
 
-
 @Component({
   selector: 'app-buscar-pista',
   templateUrl: './buscar-pista.component.html',
@@ -50,11 +51,16 @@ export class NgbTimeStringAdapter extends NgbTimeAdapter<string> {
     provide: NgbTimeAdapter, useClass: NgbTimeStringAdapter
   }]
 })
+
+@Directive({
+  selector : '[buscar]'
+})
 export class BuscarPistaComponent implements OnInit {
-  
+
   peticionPartida = new PeticionPartida();
   listaPistas:Object
   pistaActual:[];
+  errorBusqueda:String;
 
   // Datepicker config
   minDate = new Date();
@@ -74,21 +80,50 @@ export class BuscarPistaComponent implements OnInit {
 
   dateControl:FormControl;
 
-  constructor(private pistaService:PistasService, private router:Router) { }
+
+  constructor(private pistaService:PistasService, private router:Router, private reservaService:ReservaService, private renderer:Renderer, private elementRef:ElementRef ) { }
 
   ngOnInit() {
     this.dateControl = new FormControl('', [Validators.required]);
-    this.timeAux = this.timeModel.fromModel("09:00:00");
-    this.time = this.timeModel.toModel(this.timeAux);
+
+    let horaActual = moment(new Date()).format("HH")
+    let hora = (parseInt(horaActual)+1) < 10 ? "0"+(parseInt(horaActual)+1):(parseInt(horaActual)+1);
+    this.time = hora+":00:00";
     this.peticionPartida.horaInicio = this.time;
     this.peticionPartida.flexibilidad = 0;
     this.duracion = "90";
+
+    this.renderer.listen(this.elementRef.nativeElement, 'click', (evt) => {
+      if(evt.target.classList.contains("ngb-tp-chevron")){
+        this.cambioHora();
+      }
+    });
+
+    document.querySelectorAll(".ngb-tp-hour button").forEach(function(chrevron){
+      console.log("dentro queryselector" +this.time)
+      chrevron.addEventListener("click", e => {
+        console.log("click listener: " + this.time)
+      })
+  })
+
+  }
+
+
+
+  public controlHora(){
+    if(moment(new Date()).isBefore(this.fecha["_d"])){
+      this.time = "09:00:00";
+    } else {
+      let horaActual = moment(new Date()).format("HH")
+      let hora = (parseInt(horaActual)+1) < 10 ? "0"+(parseInt(horaActual)+1):(parseInt(horaActual)+1);
+      this.time = hora+":00:00";
+    }
   }
 
   /**
    * Al realizar cambios en la selección de hora
    */
-  cambioHora(){
+  public cambioHora(){
     let hora = parseInt(this.time.split(":")[0]);
     let horaMenos = document.querySelectorAll(".ngb-tp-hour button")[1];
     let horaMas = document.querySelectorAll(".ngb-tp-hour button")[0];
@@ -97,33 +132,39 @@ export class BuscarPistaComponent implements OnInit {
 
     if( hora <=  9 || hora >= 22){
       if(hora <= 9){
-        horaMenos.classList.add("disabled");
+        horaMenos.classList.add("hidden")
         horaMenos.setAttribute("disabled","disabled");
       } else {
-        horaMas.classList.add("disabled");
+        horaMas.classList.add("hidden");
         horaMas.setAttribute("disabled","disabled");
       }
       this.time = "09:00:00";
       console.log(this.time)
     } else {
-      horaMenos.classList.remove("disabled");
+      horaMenos.classList.remove("hidden");
       horaMenos.removeAttribute("disabled");
-      horaMas.classList.remove("disabled");
+      horaMas.classList.remove("hidden");
       horaMas.removeAttribute("disabled");
     }
   }  
 
   buscarPartida(){
     let fechaString = moment(this.fecha).format("DD/MM/YYYY");
+    
     this.peticionPartida.horaInicio =  fechaString + " "+ this.time;
     this.peticionPartida.duracion = parseInt(this.duracion);
     this.peticionPartida.flexibilidad = this.flexibilidad;
 
     return this.pistaService.buscarPartida(this.peticionPartida).
     subscribe(data => {
-      this.listaPistas = this.organizarPistas(data);
-      sessionStorage.setItem("dispoPistas", JSON.stringify(this.listaPistas));
-      console.log(this.listaPistas)
+      if(data.success != undefined){
+        this.errorBusqueda = data.message;
+        this.listaPistas = undefined;
+      } else {
+        this.errorBusqueda = undefined;
+        this.listaPistas = this.organizarPistas(data);
+        sessionStorage.setItem("dispoPistas", JSON.stringify(data));
+      }
     },
     error => console.log(error)
     )
@@ -136,10 +177,7 @@ export class BuscarPistaComponent implements OnInit {
    *  - Hora inicio
    * @param pistas 
    */
-  organizarPistas(pistas:any):any {
-    console.log("Entramos a organizar pistas")
-    console.log(pistas);
-    
+  organizarPistas(pistas:any):any {    
     //Primero obtenemos los clubes
     this.listaPistas = this.obtenerNombreClubes(pistas);
     
@@ -170,7 +208,10 @@ export class BuscarPistaComponent implements OnInit {
       pistas.forEach(pista => {
         let p:Pista = pista;
         let nombreClub = p.club;
-        let hora = moment(p.horaInicio).format("HH:mm");
+        console.log(p.horaInicio)
+        let hora = p.horaInicio.toString().split(" ")[3].slice(0,5);
+        console.log("hora")
+        console.log(hora)
         if( clubes[""+p.club+""][""+hora+""] == undefined){
           clubes[""+p.club+""][""+hora+""] = {};
         }
@@ -212,8 +253,8 @@ export class BuscarPistaComponent implements OnInit {
       if(sessionStorage.getItem("token") == undefined){
          this.router.navigateByUrl("/login")
       } else {
-        console.log("OJOOO QUE RESERVAS!");
-        console.log(pista);
+          sessionStorage.setItem("reservaSeleccionada", JSON.stringify(pista));
+          this.router.navigateByUrl("reservar");
       }
   }
 

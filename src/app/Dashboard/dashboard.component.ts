@@ -19,9 +19,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
       let token = sessionStorage.getItem("token");
-      
-      console.log(token);
-
+    
       if(token == undefined){
         this.router.navigateByUrl("/login");
       } else {
@@ -45,5 +43,7 @@ export class DashboardComponent implements OnInit {
       this.esUsuario = true;
     }
   }
+
+
 
 }

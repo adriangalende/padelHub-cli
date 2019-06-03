@@ -1,0 +1,25 @@
+<ng-container>
+    <mat-card *ngIf="reserva != undefined">
+      <p>¿ Estás seguro de que quieres reservar  esta pista?</p>
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>{{reserva.nombre}}</mat-card-title>
+        <mat-card-subtitle>{{reserva.club}}</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image  *ngIf="reserva.rutaImagenes == undefined || reserva.rutaImagenes == '' " src="../../assets/img/pista-por-defecto.jpeg" alt="Photo of a Shiba Inu">
+      <mat-card-content>
+        <p>{{reserva.tipoPista}}</p>
+        <p>{{reserva.duracion}}</p>
+        <p class="precio">{{ reserva.precio | currency:'EUR'}}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button [disabled]="bloqueaReserva || alert != undefined" class="btn btn-warning" (click)="reservar(reserva)">RESERVAR</button>
+        <button mat-button class="btn btn-outline-secondary mr-2" (click)="buscar()">VOLVER A BUSCAR</button>
+      </mat-card-actions>
+      <mat-error *ngIf="mensajeError != undefined">{{ mensajeError }}</mat-error>
+      <ngb-alert *ngIf="alert != undefined && alert.message != undefined" [type]="alert.type" (close)="close(alert)">{{ alert.message }}</ngb-alert>
+
+    </mat-card>
+
+</ng-container>
+

@@ -1,0 +1,86 @@
+$screen-xl: 1280px;
+$screen-lg: 1024px;
+$screen-md: 800px;
+$screen-sm: 640px;
+
+#header
+    background: url(https://images.unsplash.com/photo-1541744573515-478c959628a0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=375&q=80);
+    height: 70px;
+    width: 100%;
+    background-size: 100%;
+    background-position: center;
+    border-radius: 0.8rem 0.8rem 0 0;
+    color: #e0dddd;
+    font-size: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+#proximasPartidas
+    width: 800px;
+    margin: auto;
+    margin-top: 2rem;
+                    
+mat-card
+    border: 1px solid black;
+    margin-top: 1rem;
+    border-radius: 0 !important;
+    @media (max-width: $screen-lg)
+        width: 90%;
+        max-width: 100%;
+        margin: 1rem;
+    &.pagada
+        border: 1px solid green;
+        background: hsla(120, 100%, 25%, 0.0784313725490196);
+    mat-card-content
+        flex-direction: row;
+        -webkit-flex-direction: row;
+        display: flex;
+        display: -webkit-flex
+        -webkit-justify-content: space-around;
+        justify-content: space-around;
+        align-items: center;
+        -webkit-align-items: center;
+        margin: 1rem;
+        font-size: 1.5rem;
+        @media (max-width: $screen-sm)
+            flex-direction: column;
+            -webkit-flex-direction: column;            
+        p
+            button
+                margin: 1rem;
+            &:last-of-type
+                display: flex;
+                display: -webkit-flex;
+                flex-direction: column;
+                -webkit-flex-direction: column;
+
+::ng-deep
+  .dx-tooltip-wrapper .dx-overlay-content .dx-popup-content
+    padding: 14px
+  .showtime-preview > div
+    &:first-child
+      font-size: 12px
+      white-space: normal
+    &:not(:first-child)
+      font-size: 11px
+      white-space: normal
+  .movie-tooltip
+    .movie-info
+      display: inline-block
+      margin-left: 10px
+      vertical-align: top
+      text-align: left
+    img
+      height: 80px
+      margin-bottom: 10px
+    .movie-title
+      font-size: 1.5em
+      line-height: 40px
+  .long-title h3
+    font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana
+    font-weight: 200
+    font-size: 28px
+    text-align: center
+    margin-bottom: 20px
+

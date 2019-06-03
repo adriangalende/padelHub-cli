@@ -1,3 +1,42 @@
-<p>
-  club works!
-</p>
+<div class="container d-flex flex-column" >
+    <div id="agenda">
+      <table id="tablaPistas" class="table table-bordered">
+      
+      </table>
+    </div>
+
+    <div id="proximasPartidas">
+      <div id="header">
+          <h3><fa name="calendar"></fa> Próximas reservas</h3>
+        </div>
+    <ng-container *ngFor="let reserva of listaReservas; let i=index">
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                          <h3>{{reserva.horaInicio | date:'HH:mm'}}
+                            - {{ reserva.nombrePista}} - {{reserva.nombreUsuario}}
+                            <fa *ngIf="reserva.checkin == 1" name="check"></fa>
+                          </h3>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                    <mat-card [class.pagada]="reserva.checkin == 1">
+                      <mat-card-content>
+                        <p><strong>{{reserva.nombrePista}}</strong></p>
+                        <p> {{reserva.nombreUsuario}} <span class="badge badge-info">{{reserva.tipoUsuario}}</span></p>
+                        <p><fa name="phone" size="lg" rotate="90"></fa>&nbsp;{{reserva.telefonoUsuario}}</p>
+                        <p>{{reserva.duracion}} minutos</p>
+                        <p>{{ reserva.precio | currency:'EUR'}}</p>
+                        <p>
+                          <button type="button" class="btn btn-success"><fa name="check"></fa> Pagada</button>
+                          <button type="button" class="btn btn-outline-secondary btn-outline-danger"><fa name="question"></fa> Ausentes</button>
+                          <button type="button" class="btn btn-danger btn-outline-danger"><fa name="trash"></fa> Cancelar</button>
+                        </p>
+                      </mat-card-content>
+                    </mat-card>
+                </mat-expansion-panel>
+              </mat-accordion>
+    </ng-container>
+    <div *ngIf="listaReservas == null ||listaReservas.length == 0" class="alert alert-info"> todavía no hay reservas para hoy</div>
+  </div>
+</div>

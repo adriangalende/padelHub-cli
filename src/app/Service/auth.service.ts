@@ -4,13 +4,14 @@ import { Observable } from "rxjs/internal/Observable";
 import { map } from "rxjs/operators";
 import { Usuario } from '../Modelo/Usuario';
 import {JwtResponse} from '../Modelo/JwtResponse';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private ws = "http://localhost:8080/ws/usuarios";
+  private ws = environment.apiUrl + "/ws/usuarios";
   private token:string
 
   constructor(private http:HttpClient) {

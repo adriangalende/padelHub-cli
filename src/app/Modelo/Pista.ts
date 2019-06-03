@@ -1,8 +1,8 @@
 export class Pista{
-    id:number;
+    id?:number;
     idPista?:number;
     nombre?:String;
-    id_club?:number;
+    idClub?:number;
     id_tipo_pista?:number;
     carpeta_imagenes?:String;
     club?:String;

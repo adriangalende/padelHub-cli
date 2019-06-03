@@ -25,9 +25,4 @@ mat-card mat-card-actions {
   font-size: 2rem;
   font-weight: bolder;
 }
-
-mat-error {
-  padding: 1rem;
-  background: #f443;
-}
-/*# sourceMappingURL=app.component.css.map */
+/*# sourceMappingURL=reserva.component.css.map */

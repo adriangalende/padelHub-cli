@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from "rxjs/internal/Observable";
-import { map } from "rxjs/operators";
+import { map, share } from "rxjs/operators";
 import { Usuario } from '../Modelo/Usuario';
 import { JwtResponse } from '../Modelo/JwtResponse';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
 
-  private ws = "http://localhost:8080/ws/usuarios";
+  private ws = environment.apiUrl+"/ws/usuarios";
 
 
   constructor(private http:HttpClient) {}
@@ -27,6 +28,6 @@ export class UsuarioService {
           token: token
         },
         {headers: this.headers}
-      ).pipe(map(data=>data));
+      ).pipe(map(data=>data)).pipe(share());
   }
 }
