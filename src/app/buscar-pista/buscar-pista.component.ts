@@ -57,6 +57,8 @@ export class NgbTimeStringAdapter extends NgbTimeAdapter<string> {
 })
 export class BuscarPistaComponent implements OnInit {
 
+  showLoading = false;
+
   peticionPartida = new PeticionPartida();
   listaPistas:Object
   pistaActual:[];
@@ -100,9 +102,8 @@ export class BuscarPistaComponent implements OnInit {
     });
 
     document.querySelectorAll(".ngb-tp-hour button").forEach(function(chrevron){
-      console.log("dentro queryselector" +this.time)
       chrevron.addEventListener("click", e => {
-        console.log("click listener: " + this.time)
+      
       })
   })
 
@@ -113,6 +114,11 @@ export class BuscarPistaComponent implements OnInit {
   public controlHora(){
     if(moment(new Date()).isBefore(this.fecha["_d"])){
       this.time = "09:00:00";
+      let partesFecha = moment(this.fecha["_d"]).toString().split(" ");
+      partesFecha[4] =  "09:00:00";
+
+      this.minDate = new Date(partesFecha.join(" "));
+
     } else {
       let horaActual = moment(new Date()).format("HH")
       let hora = (parseInt(horaActual)+1) < 10 ? "0"+(parseInt(horaActual)+1):(parseInt(horaActual)+1);
@@ -125,30 +131,16 @@ export class BuscarPistaComponent implements OnInit {
    */
   public cambioHora(){
     let hora = parseInt(this.time.split(":")[0]);
-    let horaMenos = document.querySelectorAll(".ngb-tp-hour button")[1];
-    let horaMas = document.querySelectorAll(".ngb-tp-hour button")[0];
-    let minutoMenos = document.querySelectorAll(".ngb-tp-minute button")[1];
-    let minutoMas = document.querySelectorAll(".ngb-tp-minute button")[1];
+    //Hora actual +1
+    let minHora = parseInt(moment(this.minDate).format("HH"));
 
-    if( hora <=  9 || hora >= 22){
-      if(hora <= 9){
-        horaMenos.classList.add("hidden")
-        horaMenos.setAttribute("disabled","disabled");
-      } else {
-        horaMas.classList.add("hidden");
-        horaMas.setAttribute("disabled","disabled");
-      }
-      this.time = "09:00:00";
-      console.log(this.time)
-    } else {
-      horaMenos.classList.remove("hidden");
-      horaMenos.removeAttribute("disabled");
-      horaMas.classList.remove("hidden");
-      horaMas.removeAttribute("disabled");
+    if( hora <=  minHora || hora >= 22){
+      this.time = minHora+":00:00";
     }
   }  
 
   buscarPartida(){
+    this.showLoading = true;
     let fechaString = moment(this.fecha).format("DD/MM/YYYY");
     
     this.peticionPartida.horaInicio =  fechaString + " "+ this.time;
@@ -164,6 +156,7 @@ export class BuscarPistaComponent implements OnInit {
         this.errorBusqueda = undefined;
         this.listaPistas = this.organizarPistas(data);
         sessionStorage.setItem("dispoPistas", JSON.stringify(data));
+        this.showLoading = false;
       }
     },
     error => console.log(error)
@@ -208,10 +201,7 @@ export class BuscarPistaComponent implements OnInit {
       pistas.forEach(pista => {
         let p:Pista = pista;
         let nombreClub = p.club;
-        console.log(p.horaInicio)
         let hora = p.horaInicio.toString().split(" ")[3].slice(0,5);
-        console.log("hora")
-        console.log(hora)
         if( clubes[""+p.club+""][""+hora+""] == undefined){
           clubes[""+p.club+""][""+hora+""] = {};
         }
@@ -256,6 +246,10 @@ export class BuscarPistaComponent implements OnInit {
           sessionStorage.setItem("reservaSeleccionada", JSON.stringify(pista));
           this.router.navigateByUrl("reservar");
       }
+  }
+
+  public nombreClaseClub(club):string{
+    return club.replace(/\s/g,"").toLowerCase();
   }
 
 }

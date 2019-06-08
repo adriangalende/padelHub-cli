@@ -4,9 +4,13 @@ mat-card
     font-size: 64.5%;
     font-weight: bold;
     color: $gris;
+    margin: 1rem;
+    @media (max-width: 1024px)
+        font-size: 1.8rem;
 
 #timepicker
     ngb-timepicker
+        font-size: 2rem;
         fieldset
             .ngb-tp
                 .ngb-tp-spacer
@@ -26,3 +30,51 @@ mat-card
         label
             width: 50px;
             margin: 0.4rem;
+
+.padelgoin
+    background: orange;
+
+.contenedor-pistas
+    display: flex;
+    justify-content: space-around;
+    display: -webkit-flex;
+    -webkit-justify-content: space-around;
+    @media(max-width: 768px)
+        flex-wrap: wrap
+
+mat-card-content
+    justify-content: center;
+    font-size: 2rem;
+
+mat-card
+    @media(max-width: 768px)
+        width: 100% !important;
+        img
+            display: none;
+
+.mat-card-header 
+    justify-content: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    -webkit-align-items: center;
+
+.loading-container
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fffffff2;
+  z-index: 100;
+  mat-spinner
+      
+
+.loading-img
+    width: 200px;
+
+
+    
+    
+
+

@@ -1,82 +1,91 @@
-<mat-card>
-  <mat-card-title><h1>Buscar partida!</h1></mat-card-title>
-  <mat-card-content>
-    <mat-form-field>
-      <input matInput [(ngModel)]="fecha" (ngModelChange)="controlHora()" placeholder="Fecha" [min]="minDate" [matDatepicker]="dateValid" disabled>
-      <mat-datepicker-toggle matSuffix [for]="dateValid"></mat-datepicker-toggle>
-      <mat-datepicker touchUi #dateValid disabled="false"></mat-datepicker>
-      <mat-error align="end" *ngIf="dateControl.hasError('required')">
-        La fecha no es correcta
-      </mat-error>
-    </mat-form-field>
+<div [class.hidden]="!showLoading" class="loading-container">
+  <mat-spinner></mat-spinner>
+</div>
 
-    <div id="timepicker" class="form-group" style="display:flex; justify-content: center;">
-      <ngb-timepicker [(ngModel)]="time" (change)="cambioHora();" [minuteStep]="step" [size]="size"></ngb-timepicker>
-    </div>
+<div class="container w-100">
+  <mat-card>
+    <mat-card-title><h1>Buscar partida!</h1></mat-card-title>
+    <mat-card-content>
+      <mat-form-field>
+        <input matInput [(ngModel)]="fecha" (ngModelChange)="controlHora()" placeholder="Fecha" [min]="minDate" [matDatepicker]="dateValid" disabled>
+        <mat-datepicker-toggle matSuffix [for]="dateValid"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #dateValid disabled="false"></mat-datepicker>
+        <mat-error align="end" *ngIf="dateControl.hasError('required')">
+          La fecha no es correcta
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Duración de la partida</mat-label>
-      <mat-select [(value)]="duracion">
-        <mat-option value="60">60 minutos</mat-option>
-        <mat-option value="90" >90 minutos</mat-option>
-        <mat-option value="120">120 minutos</mat-option>
-        <mat-option value="180">180 minutos</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <div id="timepicker" class="form-group" style="display:flex; justify-content: center;">
+        <ngb-timepicker [(ngModel)]="time" (change)="cambioHora();" [minuteStep]="step" [size]="size"></ngb-timepicker>
+      </div>
 
-    <div class="form-group btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="flexibilidad">
-      <label class="col-form-label">Flexibilidad:
-      <label ngbButtonLabel class="btn-primary">
-        <input ngbButton type="radio" [value]="1">+1
+      <mat-form-field>
+        <mat-label>Duración de la partida</mat-label>
+        <mat-select [(value)]="duracion">
+          <mat-option value="60">60 minutos</mat-option>
+          <mat-option value="90" >90 minutos</mat-option>
+          <mat-option value="120">120 minutos</mat-option>
+          <mat-option value="180">180 minutos</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="form-group btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="flexibilidad">
+        <label class="col-form-label">Flexibilidad:
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" [value]="1">+1
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" value="2"> +2
+        </label>
       </label>
-      <label ngbButtonLabel class="btn-primary">
-        <input ngbButton type="radio" value="2"> +2
-      </label>
-    </label>
-    </div>
-    
-    <hr>
-    <button (click)="buscarPartida()" class="btn btn-lg btn-primary"> Buscar </button>
-  </mat-card-content>
-</mat-card>
+      </div>
+      
+      <hr>
+      <button (click)="buscarPartida()" class="btn btn-lg btn-primary"> Buscar </button>
+    </mat-card-content>
+  </mat-card>
 
-<mat-error >{{ errorBusqueda }}</mat-error>
+  <mat-error >{{ errorBusqueda }}</mat-error>
 
-<mat-accordion *ngIf="listaPistas != undefined">
-  <ng-container *ngFor="let club of obtenerClubes(listaPistas)">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{club}}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <ng-container *ngFor="let hora of obtenerHoras(club)">
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{hora}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <ng-container *ngFor="let pista of obtenerPistas(club, hora)">  
-                <mat-card *ngIf="obtenerPistaActual(club,hora,pista); let pistaActual" style="width:25%;">
-                      <mat-card-header>
-                        <div mat-card-avatar class="example-header-image"></div>
-                        <mat-card-title>{{pista}}</mat-card-title>
-                        <mat-card-subtitle>{{ pistaActual.precio | currency:'EUR'}}</mat-card-subtitle>
-                      </mat-card-header>
-                      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-                      <mat-card-content>
-                        <p>{{pistaActual.tipoPista}}</p>
-                        <p>{{pistaActual.duracion}}</p>
-                      </mat-card-content>
-                      <mat-card-actions>
-                        <button mat-button (click)="reservar(pistaActual)">RESERVAR</button>
-                      </mat-card-actions>
-                    </mat-card>
-            </ng-container>
+  <mat-accordion *ngIf="listaPistas != undefined">
+    <ng-container *ngFor="let club of obtenerClubes(listaPistas)">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header >
+          <mat-panel-title>
+            {{club}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-container *ngFor="let hora of obtenerHoras(club)">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{hora}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="contenedor-pistas">
+                  <ng-container *ngFor="let pista of obtenerPistas(club, hora)">  
+                      <mat-card *ngIf="obtenerPistaActual(club,hora,pista); let pistaActual" style="width:25%;">
+                            <mat-card-header>
+                              <mat-card-title>{{pista}}</mat-card-title>
+                            </mat-card-header>
+                            <img mat-card-image src="/src/assets/img/{{pista}}.jgp"  onerror="if (this.src != 'error.jog') this.src = '/assets/img/sin-foto.png';" alt="foto pista {{pista}}">
+                            <mat-card-content>
+                              <p>pista {{pistaActual.tipoPista}}</p>
+                              <p><fa name="clock-o"></fa> {{pistaActual.duracion}} minutos</p>
+                              <p class="label label-info">{{ pistaActual.precio | currency:'EUR'}} / hora<p>
 
-          </mat-expansion-panel>
-        </ng-container>
-    </mat-expansion-panel>
-  </ng-container>
-</mat-accordion>
+                            </mat-card-content>
+                            <mat-card-actions>
+                              <button  class="btn btn-primary" (click)="reservar(pistaActual)">RESERVAR</button>
+                            </mat-card-actions>
+                          </mat-card>
+                  </ng-container>
+                </div>
+            </mat-expansion-panel>
+          </ng-container>
+      </mat-expansion-panel>
+    </ng-container>
+  </mat-accordion>
+</div>
+
+
