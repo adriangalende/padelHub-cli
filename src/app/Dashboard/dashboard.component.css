@@ -1,1 +1,14 @@
-/* No CSS *//*# sourceMappingURL=dashboard.component.css.map */
+mat-toolbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  display: -webkit-flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-justify-content: space-around;
+}
+
+mat-toolbar .login-zone .logout:hover {
+  cursor: pointer;
+}
+/*# sourceMappingURL=dashboard.component.css.map */

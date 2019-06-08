@@ -27,7 +27,7 @@ export class PistasService {
       { 
        },
       { headers: this.headers }
-    ).pipe(map(data=>data));
+    );
   }
 
   buscarPartida(peticion:PeticionPartida): Observable<any>{
@@ -41,7 +41,7 @@ export class PistasService {
         flexibilidad:peticion.flexibilidad
        },
       { headers: this.headers }
-    ).pipe(map(data=>data));
+    );
   }
 
 }

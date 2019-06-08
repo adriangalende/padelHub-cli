@@ -1,36 +1,69 @@
+<div [class.hidden]="!showLoading" class="loading-container"><mat-spinner></mat-spinner></div>
 <div class="container d-flex flex-column" >
     <div id="agenda">
-      <table id="tablaPistas" class="table table-bordered">
-      
-      </table>
+      <div class="controlFecha">
+        <span class="diamenos" (click)="cambiarDia(0)">&lt;</span>
+        <span>{{currentDate | date:'dd/MM/yyyy'}}</span>
+        <span class="diamas" (click)="cambiarDia(1)">&gt;</span></div>
+      <mat-tab-group>
+        <ng-container *ngFor="let pista of listaPistas">
+          <mat-tab label="{{pista.nombre}}"> 
+              <ng-container *ngIf="listaTodasReservas[ currentDate | date:'dd/MM/yyyy' ] != undefined && listaTodasReservas[ currentDate | date:'dd/MM/yyyy' ][pista.nombre] != undefined">
+                <ng-container *ngFor="let reserva of listaTodasReservas[ currentDate | date:'dd/MM/yyyy' ][pista.nombre]">
+                  <mat-card [class.pagada]="reserva.checkin == 1" [class.bloqueo]="idBloqueo == reserva.idTipoReserva" [class.noShow]="reserva.noShow == 1" class="reservaPista">
+                    <mat-card-header *ngIf="reserva.checkin == 0 && reserva.noShow == 0" class="borrar-reserva">
+                        <fa (click)="cancelar($event, reserva)" size="lg" name="times"></fa>
+                    </mat-card-header>  
+                    <mat-card-content>
+                        <p *ngIf="idBloqueo != reserva.idTipoReserva ">
+                            <fa *ngIf="reserva.noShow == 1" name="exclamation-triangle"></fa>
+                           {{ reserva.nombreUsuario}} <span class="badge badge-info">{{reserva.tipoUsuario}}</span>
+                          </p>
+                        <p *ngIf="idBloqueo == reserva.idTipoReserva"> Bloqueo pista <span class="badge badge-info">{{reserva.tipoUsuario}}</span></p>
+                        <p> <fa name="clock-o"></fa>  {{ reserva.horaInicio | date: 'HH:mm' }} - {{  reserva.horaFin | date: 'HH:mm' }} </p>
+                      </mat-card-content>
+                    </mat-card>
+                </ng-container>
+              </ng-container>
+
+              <div *ngIf="listaTodasReservas[ currentDate | date:'dd/MM/yyyy' ] == undefined || listaTodasReservas[ currentDate | date:'dd/MM/yyyy' ][pista.nombre] == undefined" class="alert alert-info alertSinPista"> todavía no hay reservas para hoy en esta pista</div>
+              
+          </mat-tab>
+        </ng-container>
+      </mat-tab-group>
+    </div>
+
+    <div>
+      <button (click)="openDialog()" type="button" class="btn btn-primary">Añadir nueva reserva</button>
     </div>
 
     <div id="proximasPartidas">
       <div id="header">
-          <h3><fa name="calendar"></fa> Próximas reservas</h3>
+          <h3><fa name="calendar"></fa> Empiezan pronto</h3>
         </div>
     <ng-container *ngFor="let reserva of listaReservas; let i=index">
         <mat-accordion>
-            <mat-expansion-panel>
+            <mat-expansion-panel *ngIf="idBloqueo != reserva.idTipoReserva">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                           <h3>{{reserva.horaInicio | date:'HH:mm'}}
                             - {{ reserva.nombrePista}} - {{reserva.nombreUsuario}}
                             <fa *ngIf="reserva.checkin == 1" name="check"></fa>
+                            <fa matTooltip="Los usuarios no se han presentado o no han pagado la reserva" matTooltipClass="example-tooltip-red" *ngIf="reserva.noShow == 1" name="exclamation-triangle"></fa>
                           </h3>
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                    <mat-card [class.pagada]="reserva.checkin == 1">
+                    <mat-card [class.pagada]="reserva.checkin == 1" [class.noShow]="reserva.noShow == 1">
                       <mat-card-content>
                         <p><strong>{{reserva.nombrePista}}</strong></p>
                         <p> {{reserva.nombreUsuario}} <span class="badge badge-info">{{reserva.tipoUsuario}}</span></p>
                         <p><fa name="phone" size="lg" rotate="90"></fa>&nbsp;{{reserva.telefonoUsuario}}</p>
                         <p>{{reserva.duracion}} minutos</p>
                         <p>{{ reserva.precio | currency:'EUR'}}</p>
-                        <p>
-                          <button type="button" class="btn btn-success"><fa name="check"></fa> Pagada</button>
-                          <button type="button" class="btn btn-outline-secondary btn-outline-danger"><fa name="question"></fa> Ausentes</button>
-                          <button type="button" class="btn btn-danger btn-outline-danger"><fa name="trash"></fa> Cancelar</button>
+                        <p *ngIf="reserva.checkin == 0 && reserva.noShow == 0">
+                          <button *ngIf="reserva.idTipoReserva != idBloqueo" type="button" (click)="checkIn(reserva)" class="btn btn-success"><fa name="check"></fa> Pagada</button>
+                          <button *ngIf="reserva.idTipoReserva != idBloqueo" type="button" (click)="noShow(reserva)"class="btn btn-outline-secondary btn-outline-danger"><fa name="question"></fa> Ausentes</button>
+                          <button type="button" (click)="cancelar($event, reserva)" class="btn btn-danger btn-outline-danger"><fa name="trash"></fa> Cancelar</button>
                         </p>
                       </mat-card-content>
                     </mat-card>
@@ -40,3 +73,8 @@
     <div *ngIf="listaReservas == null ||listaReservas.length == 0" class="alert alert-info"> todavía no hay reservas para hoy</div>
   </div>
 </div>
+<style>
+    .mat-tab-body-content {
+      display: flex;
+    }
+</style>

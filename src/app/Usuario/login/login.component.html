@@ -6,10 +6,7 @@
             <div class="card">
               <div class="card-body text-center">
                 <form #formLogin="ngForm" (ngSubmit)="onLogin(formLogin)" *ngIf="getToken() == unefined">
-                  <h1 class="h3 mb-3 font-weight-normal" *ngIf="!isError">Login</h1>
-                  <div class="alert alert-danger" role="alert" *ngIf="isError">
-                    Something is wrong!
-                  </div>
+                  <img class="logo img-fluid" src="/assets/img/padelHub-w.png" alt="">
                   <div class="form-group">
                     <input type="email" id="email" name="email" class="form-control" placeholder="Email" [(ngModel)]="usuario.email" required>
                   </div>
@@ -17,9 +14,10 @@
                     <input type="password" id="password" name="password" class="form-control" placeholder="Password" [(ngModel)]="usuario.password"
                       required>
                   </div>
-                  <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+                  <button type="submit" class="btn btn-lg btn-primary btn-block">Dale caña!</button>
                   <p class="alert-login alert hidden"></p>
                   <div class="form-group">
+                    <i class="fas fa-question-mark"></i>
                     <a routerLink="/registrar" class="form-control login-user">Todavía no eres miembro ?</a>
                   </div>
                 </form>

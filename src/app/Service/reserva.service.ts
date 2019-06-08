@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Pista } from '../Modelo/Pista';
 import { Observable, Subject } from 'rxjs';
-import { map, multicast, shareReplay, share } from 'rxjs/operators';
 import * as moment from 'moment';
 import { environment } from '../../environments/environment';
 
@@ -34,13 +33,15 @@ export class ReservaService {
         idClub: peticion.idClub,
         horaInicio: peticion.horaInicio,
         precio: peticion.precio,
-        duracion: peticion.duracion
+        duracion: peticion.duracion,
+        idTipoReserva: peticion.id_tipo_reserva
        },
       { headers: this.headers }
     );
   }
 
   recuperarReservas(): Observable<any>{
+    console.log("entro en recuperar las reservas del usuario");
     let url = this.ws + "misReservas";
     return this.http.post<Pista>(
       url,
@@ -50,6 +51,7 @@ export class ReservaService {
   }
 
   recuperarReservasClub(): Observable<any>{
+    console.log("entro en recuperarReservasClub");
     let url = this.ws + "reservas";
     return this.http.post<Pista>(
       url,
@@ -58,17 +60,52 @@ export class ReservaService {
     );
   }
 
-  recuperarTodasReservasClub(): Observable<any>{
+recuperarTodasReservasClub(): Observable<any>{
+  console.log("entro en recuperarTODASReservasClub");
     let url = this.ws + "treservas";
     return this.http.post<Pista>(
       url,
       {}
       ,{ headers: this.headers }
     );
-  }
+  } 
 
   cancelar(peticion:Pista): Observable<any>{
     let url = this.ws + "cancelar";
+    return this.http.post<Pista>(
+      url,
+      {
+        idReserva: peticion.id,
+        idClub: peticion.idClub
+      }
+      ,{ headers: this.headers }
+    );
+  }
+
+  obtenerTiposReservaClub(idClub:string){
+    let url = environment.apiUrl + "/ws/tiposReservaClub/"+idClub;
+    return this.http.post<Pista>(
+      url,
+      {
+      }
+      ,{ headers: this.headers }
+    );
+  }
+
+  checkIn(peticion:Pista): Observable<any>{
+    let url = this.ws + "checkIn";
+    return this.http.post<Pista>(
+      url,
+      {
+        idReserva: peticion.id,
+        idClub: peticion.idClub
+      }
+      ,{ headers: this.headers }
+    );
+  }
+
+  noShow(peticion:Pista): Observable<any>{
+    let url = this.ws + "noShow";
     return this.http.post<Pista>(
       url,
       {

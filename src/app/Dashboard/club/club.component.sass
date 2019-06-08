@@ -32,6 +32,15 @@ mat-card
     &.pagada
         border: 1px solid green;
         background: hsla(120, 100%, 25%, 0.0784313725490196);
+        box-shadow: none;
+    &.bloqueo
+      background: #dcd6d6;
+      border: 1px solid #a09b9b;
+      box-shadow: none;
+    &.noShow
+      background: #ec9393;
+      border: 1px solid #ef0e0e;
+      box-shadow: none;
     mat-card-content
         flex-direction: row;
         -webkit-flex-direction: row;
@@ -55,32 +64,47 @@ mat-card
                 flex-direction: column;
                 -webkit-flex-direction: column;
 
-::ng-deep
-  .dx-tooltip-wrapper .dx-overlay-content .dx-popup-content
-    padding: 14px
-  .showtime-preview > div
-    &:first-child
-      font-size: 12px
-      white-space: normal
-    &:not(:first-child)
-      font-size: 11px
-      white-space: normal
-  .movie-tooltip
-    .movie-info
-      display: inline-block
-      margin-left: 10px
-      vertical-align: top
-      text-align: left
-    img
-      height: 80px
-      margin-bottom: 10px
-    .movie-title
-      font-size: 1.5em
-      line-height: 40px
-  .long-title h3
-    font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana
-    font-weight: 200
-    font-size: 28px
-    text-align: center
-    margin-bottom: 20px
+.controlFecha
+    display: flex;
+    font-size: 1.6rem;
+    justify-content: space-around;
+    font-weight: bolder;
+    align-items: center;
+    .diamenos, .diamas
+      &:hover
+        cursor: pointer;
+      font-size: 3rem;
+
+
+.reservaPista
+  margin-left: 1rem; 
+  max-width: 23vw; 
+  &:has(> div.mat-tab-body-content )
+    display: flex !important;
+
+.borrar-reserva
+  display: flex;
+  justify-content: flex-end;
+  &:hover
+    cursor: pointer;
+
+.mat-tab-body-content 
+  display: flex !important;
+
+.alertSinPista
+  margin-top: 4.4rem;
+
+
+.loading-container
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fffffff2;
+  z-index: 100;
+  mat-spinner
+    .mat-progress-spinner
+      stroke: #337ab7;
 

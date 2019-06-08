@@ -1,0 +1,45 @@
+<div [class.hidden]="!showLoading" class="loading-container"><mat-spinner></mat-spinner></div>
+<mat-card>
+  <mat-card-title><h1>Reservar pista</h1></mat-card-title>
+  <mat-card-content>
+    <mat-form-field>
+      <input matInput [(ngModel)]="fecha" (ngModelChange)="controlHora()" placeholder="Fecha" [min]="minDate" [matDatepicker]="dateValid" disabled>
+      <mat-datepicker-toggle matSuffix [for]="dateValid"></mat-datepicker-toggle>
+      <mat-datepicker touchUi #dateValid disabled="false"></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Pista</mat-label>
+      <mat-select [(value)]="pistaSeleccionada">
+        <ng-container  *ngFor="let pista of data.pistas">
+            <mat-option value="{{pista.id}}">{{pista.nombre}}</mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+
+    <div id="timepicker" class="form-group" style="display:flex; justify-content: center;">
+      <ngb-timepicker [(ngModel)]="time" [minuteStep]="step" [size]="size"></ngb-timepicker>
+    </div>
+
+    <mat-form-field>
+      <mat-label>Duración de la partida</mat-label>
+      <mat-select [(value)]="duracion">
+        <mat-option value="60">60 minutos</mat-option>
+        <mat-option value="90" >90 minutos</mat-option>
+        <mat-option value="120">120 minutos</mat-option>
+        <mat-option value="180">180 minutos</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox *ngIf="clubTieneBloqueo" class="btn btn-primary" [(ngModel)]="bloqueo">Bloquear pista</mat-checkbox>
+
+    <div [hidden]="!bloqueo" class="alert alert-warning"><fa name="danger"></fa> Si vas a bloquear una pista, asegúrate de que no haya pistas
+      reservadas para este día en la pista a bloquear o se borrarán.
+    </div>
+    
+    <hr>
+    <button (click)="reservar(data.idClub)" class="btn btn-lg btn-primary"> Reservar </button>
+  </mat-card-content>
+</mat-card>
+
+<mat-error >{{ errorBusqueda }}</mat-error>

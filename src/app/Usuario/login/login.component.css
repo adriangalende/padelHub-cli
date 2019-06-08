@@ -1,4 +1,63 @@
 .hidden {
   display: none;
 }
+
+#login {
+  margin: 0 auto;
+  background: url(/assets/img/back-login.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  width: 100%;
+  padding: 1rem;
+  min-width: 271px;
+}
+
+@media (orientation: portrait) and (max-width: 1024px) {
+  #login {
+    height: 100%;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 768px) {
+  #login {
+    height: 100%;
+  }
+}
+
+#login .container {
+  height: 100%;
+}
+
+.row {
+  margin-right: -15px;
+  margin-left: -15px;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-pack: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+          align-items: center;
+  height: 100%;
+}
+
+.alert-login {
+  margin: 2rem;
+}
+
+.login-user {
+  margin-top: 2rem;
+  width: 100%;
+  height: 100%;
+  font-weight: bolder;
+  font-size: 1.5rem;
+}
+
+.logo {
+  width: 100%;
+}
 /*# sourceMappingURL=login.component.css.map */

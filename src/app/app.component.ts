@@ -20,7 +20,4 @@ export class AppComponent {
     this.adapter.setLocale('es');
   }
   
-  listar(){
-    this.router.navigate(["listar"]);
-  }
 }

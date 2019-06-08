@@ -34,7 +34,12 @@ export class LoginComponent implements OnInit {
        alert.classList.remove("hidden");
       }
     },
-    error => console.log(error)
+    error => {
+      let alert = document.getElementsByClassName('alert-login')[0];
+      alert.textContent = "Houston, hemos tenido un problema..";
+      alert.classList.add("alert-danger");
+      alert.classList.remove("hidden");
+    }
     )
   }
 

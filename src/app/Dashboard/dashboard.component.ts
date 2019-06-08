@@ -23,11 +23,10 @@ export class DashboardComponent implements OnInit {
       if(token == undefined){
         this.router.navigateByUrl("/login");
       } else {
-        this.usuarioService.permisos(token).subscribe(item => {
+         this.usuarioService.permisos(token).subscribe(item => {
             //redirigir a usuario según su rol
             this.redirigirUsuario(JSON.parse(item["jwtUser"]));
-        });
-
+        }); 
       }
     
   }
@@ -35,6 +34,7 @@ export class DashboardComponent implements OnInit {
   
   redirigirUsuario(usr:JwtResponse):void{
     this.usuario = usr;
+    console.log(this.usuario)
     if(usr["role"] == "club"){
       this.esClub = true;
       this.esUsuario = false;
@@ -44,6 +44,9 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-
+  logout(){
+    sessionStorage.clear();
+    location.reload();
+  }
 
 }

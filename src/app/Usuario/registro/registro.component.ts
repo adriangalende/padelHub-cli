@@ -27,7 +27,14 @@ export class RegistroComponent implements OnInit {
        alert.classList.add("alert-warning");
        alert.classList.remove("hidden");
       }
-    })
+    },
+      error => {
+        let alert = document.getElementsByClassName('alert-registro')[0];
+        alert.textContent = "Parece que alguien ha tirado del cable";
+        alert.classList.add("alert-danger");
+        alert.classList.remove("hidden");
+      }
+    )
     
   }
 

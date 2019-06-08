@@ -45,12 +45,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatTableModule} from '@angular/material/table';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatDialogModule} from '@angular/material/dialog';
+import { ReservarComponent } from './Dashboard/club/reservar/reservar.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { HomeComponent } from './home/home.component';
 
 
 
-
- 
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +65,9 @@ import {MatTableModule} from '@angular/material/table';
     ClubComponent,
     BuscarPistaComponent,
     ReservaComponent,
-    UsuarioComponent
+    UsuarioComponent,
+    ReservarComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -82,13 +89,19 @@ import {MatTableModule} from '@angular/material/table';
     MatSnackBarModule,
     NgbModule,
     AngularFontAwesomeModule,
-    MatTableModule
+    MatTabsModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatToolbarModule
   ],
   providers: [ServiceService, UsuarioService, PistasService, ReservaService, {
     provide: LOCALE_ID,
     useValue: 'es-ES'
   }],
   bootstrap: [AppComponent],
+  entryComponents: [ReservarComponent]
 
 })
 export class AppModule { }

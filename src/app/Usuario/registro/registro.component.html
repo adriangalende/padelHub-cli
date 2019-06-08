@@ -1,12 +1,12 @@
 <section id="registro" class="mb-5 mt-5">
   <div class="container">
     <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
+      <div class="col-4 mx-auto">
         <div class="card_registro">
           <div class="card">
             <div class="card-body text-center">
               <form #formRegistro="ngForm" (ngSubmit)="onRegister(formRegistro)">
-                <h1 class="h3 mb-3 font-weight-normal" *ngIf="!isError">Alta usuario</h1>
+                <img class="logo img-fluid" src="/assets/img/padelHub-w.png" alt="">
                 <div class="form-group">
                   <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Tu nombre" ngModel required>
                 </div>

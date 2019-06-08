@@ -1,11 +1,13 @@
 import { Component, OnInit, NgModule, ViewChild, enableProdMode, OnDestroy } from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ReservaService } from 'src/app/Service/reserva.service';
 import { Pista } from 'src/app/Modelo/Pista';
 import * as moment from "moment";
 import { PistasService } from 'src/app/Service/pistas.service';
-import { first } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { ReservarComponent } from './reservar/reservar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TiposReserva } from 'src/app/Modelo/TiposReserva';
 
 @Component({
   selector: 'app-club',
@@ -19,26 +21,43 @@ export class ClubComponent implements OnInit {
   mensaje:String;
   listaReservas:Pista
   listaTodasReservas: Pista;
+  tiposReserva:any;
+  idBloqueo:number;
   numeroPistas:number;
   listaPistas:Pista[];
+  reservasDia:any;
+  showLoading = true;
 
-  constructor(private reservaService:ReservaService, private pistaService:PistasService, private router:Router) { }
+  constructor(
+    private reservaService:ReservaService, 
+    private pistaService:PistasService, 
+    private router:Router, 
+    public dialog:MatDialog,
+    private _snackBar: MatSnackBar
+    ) { }
 
   ngOnInit() {
-    if(sessionStorage.getItem("token") == undefined){
-      this.router.navigateByUrl("/login")
-    }
     this.cargarReservas();
   }
 
 
 
-  private obtenerNumeroPistas(idPista){
-    this.pistaService.pistasClub(idPista).subscribe(data => {
+  private obtenerDatosPistasClub(idClub){
+    this.pistaService.pistasClub(idClub).subscribe(data => {
         this.listaPistas = data; 
-        this.numeroPistas = data.length;
-        this.generarTabla();
-    });
+    }); 
+  }
+
+  private obtenerTiposReservaClub(idClub){
+    this.reservaService.obtenerTiposReservaClub(idClub).subscribe(data => {
+        this.tiposReserva = data; 
+        this.tiposReserva.forEach(tipoReserva => {
+          if(tipoReserva.descripcion == "bloqueo"){
+            this.idBloqueo = tipoReserva.id;
+            this.showLoading = false;
+          }
+        })
+    }); 
   }
 
   private cargarReservas(){
@@ -53,74 +72,20 @@ export class ClubComponent implements OnInit {
 
     this.reservaService.recuperarTodasReservasClub().subscribe(data => {
       if(data.success == undefined){
-        this.listaTodasReservas = data;
+        this.listaTodasReservas = this.ordenarReservas(data);
         sessionStorage.setItem("listaReservas",JSON.stringify(this.listaTodasReservas));
-        this.obtenerNumeroPistas(<Pista> data[0].idClub);
+        this.obtenerDatosPistasClub(<Pista> data[0].idClub);
+        this.obtenerTiposReservaClub(data[0].idClub);
       } else {
         this.mensaje = data.message;
       }
-  });
+  }); 
 
 
   }
 
   
-  private generarTabla(){
-
-    let listaReservas = this.ordenarReservas(JSON.parse(sessionStorage.getItem("listaReservas")));
-    let tabla = document.getElementById("tablaPistas");
-    //Generamos los th ( pistas del club )
-    let thead = document.createElement("thead")
-    let tr = document.createElement("tr");
-
-    let thvacio = document.createElement("th");
-    thvacio.scope= "col";
-    tr.append(thvacio);
-
-    this.listaPistas.forEach(pista=>{
-      let th = document.createElement("th");
-      th.scope= "col";
-      let text = document.createTextNode(<string>pista.nombre);
-      th.append(text);
-      tr.append(th);
-    })
-
-    thead.append(tr);
-    tabla.appendChild(thead);
-
-    let tbody = document.createElement("tbody");
-
-    //Generamos los horarios de 09:00 a 23:00 
-    for(let i=9;i<=23;i++){
-      let tr = document.createElement("tr")
-      let tr2 = document.createElement("tr")
-      //Añadimos las horas
-      let td = document.createElement("td");
-      let hora = i < 10 ? "0"+i+":00" : i+":00";
-      let tdText = document.createTextNode(hora);
-      td.append(tdText)
-      td.rowSpan = 2;
-      tr.append(td);
-      //Añadimos las td para las pistas
-      for(let j=0; j<this.numeroPistas; j++){
-        let td = document.createElement("td");
-        td.className = "pista"+(j+1)+"-"+i+"00";
-        tr.append(td);
-        let td2 = document.createElement("td");
-        td2.className = "pista"+(j+1)+"-"+i+"30";
-        tr2.append(td2);
-      }
-
-      tbody.append(tr)
-      tbody.append(tr2)
-    }
-
-
-    tabla.appendChild(tbody)
-
-  
-
-  }
+ 
 
   private ordenarReservas(reservas):any{
     let reservasOrdenadas:any
@@ -129,6 +94,8 @@ export class ClubComponent implements OnInit {
    
     //Ordenamos por nombre de pistas.
     reservasOrdenadas = this.ordenarPorPista(reservas, reservasOrdenadas);
+
+    return reservasOrdenadas;
   }
 
   private parsearFecha(fecha:String):Date{
@@ -167,5 +134,82 @@ export class ClubComponent implements OnInit {
       return fechas;
   }
 
+  cambiarDia(masMenos){
+    let momentum = moment(this.currentDate)
+    if(masMenos == 1){
+        momentum.add(1,'days');
+    } else if ( masMenos == 0){
+      momentum.subtract(1,'days');
+    }
+    this.currentDate = momentum.toDate();
+    this.reservasDia = this.listaTodasReservas[momentum.format("DD/MM/YYYY")];
+    console.log(this.reservasDia)
+  }
+
+  openDialog():void{
+    const dialogRef = this.dialog.open(ReservarComponent, {
+      width: '350px',
+      data: {
+        pistas: this.listaPistas,
+        idClub: this.listaPistas[0].idClub
+      }
+    });
+
+    
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  //Los usuarios se han presentado a la partida y han abonado el dinero
+  checkIn(reserva:Pista){
+    return this.reservaService.checkIn(reserva).
+    subscribe(data => {
+        this._snackBar.open(data.message,"",{
+          duration: 2000,
+        });
+        reserva.checkIn = 1;
+      },
+      error => {
+        this._snackBar.open(error.error.text,"",{
+          duration: 2000,
+        });
+      }
+    )
+  }
+
+    //Los usuarios no se han presentado o la pista no ha sido pagada.
+    noShow(reserva:Pista){
+      return this.reservaService.noShow(reserva).
+      subscribe(data => {
+          this._snackBar.open(data.message,"",{
+            duration: 2000,
+          });
+          reserva.checkIn = 1;
+        },
+        error => {
+          this._snackBar.open(error.error.text,"",{
+            duration: 2000,
+          });
+        }
+      )
+    }
+
+  alert:Alert
+  cancelar(event, reserva:Pista){
+    return this.reservaService.cancelar(reserva).
+    subscribe(data => {
+        this._snackBar.open(data.message,"",{
+          duration: 2000,
+        });
+        event.srcElement.offsetParent.offsetParent.classList.add("hidden");
+      },
+      error => {
+        this._snackBar.open(error.error.text,"",{
+          duration: 2000,
+        });
+      }
+    )
+  }
 
 }

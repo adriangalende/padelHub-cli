@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "mappings": "",
+    "mappings": "AAAA,AAAA,WAAW,CAAC;EACR,OAAO,EAAE,IAAI;EACb,OAAO,EAAE,YAAY;EACrB,eAAe,EAAE,YAAY;EAC7B,uBAAuB,EAAE,YAAY;CAIG;;AAR5C,AAOgB,WAPL,CAKP,WAAW,CACP,OAAO,AACE,MAAM,CAAC;EACJ,MAAM,EAAE,OAAO;CAAG",
     "sources": [
         "dashboard.component.sass"
     ],

@@ -32,7 +32,7 @@ export class AuthService {
       {
         headers:this.headers
       }
-    ).pipe(map(data=>data));
+    );
   }
 
   register(usuario:Usuario):Observable<any>{
@@ -46,7 +46,7 @@ export class AuthService {
         password: usuario.password
        },
       { headers: this.headers }
-    ).pipe(map(data=>data));
+    );
   }
 
   logout():void{

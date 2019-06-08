@@ -1,6 +1,22 @@
+
+<mat-toolbar>
+    <span *ngIf="usuario.role == 'club' || usuario.role == 'monitor'">
+        <img src="../../assets/img/logos/padel Go In.png" alt="">
+        <small>Powered by PadelHub</small>
+    </span>
+
+    <span *ngIf="usuario.role == 'usuario'">
+            <img src="" alt="PadelHubLogo">
+        </span>
+
+    <span class="example-spacer"></span>
+    <div class="login-zone">
+        <span class="user"><fa name="user"></fa> {{usuario.username}}</span>&nbsp;
+        <span (click)="logout()" class="logout btn btn-danger"><fa *ngIf="esClub || esUsuario" name="sign-out"></fa> Salir</span>
+    </div>
+</mat-toolbar>
 <div>
 <app-club *ngIf="esClub"></app-club>
 
 <app-usuario *ngIf="esUsuario"></app-usuario>
-
 </div>

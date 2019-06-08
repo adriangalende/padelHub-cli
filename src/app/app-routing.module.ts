@@ -6,16 +6,18 @@ import {RegistroComponent} from './Usuario/registro/registro.component';
 import { ClubComponent } from './Dashboard/club/club.component';
 import { BuscarPistaComponent } from './buscar-pista/buscar-pista.component';
 import { ReservaComponent } from './Reserva/reserva.component';
+import { HomeComponent } from './home/home.component';
 
 
 const routes: Routes = [
+  {path:'home', component:HomeComponent},
   {path:'login', component:LoginComponent},
   {path:'registrar', component:RegistroComponent},
   {path:'dashboard', component:DashboardComponent},
   {path:'club', component:ClubComponent},
   {path:'buscar', component: BuscarPistaComponent},
   {path:'reservar', component: ReservaComponent},
-  {path:'**', redirectTo:'/login'}
+  {path:'**', redirectTo:'/home'}
 ];
 
 @NgModule({

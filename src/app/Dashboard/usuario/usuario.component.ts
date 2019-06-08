@@ -26,9 +26,6 @@ export class UsuarioComponent implements OnInit {
   proximasReservas:number;
 
   ngOnInit() {
-    if(sessionStorage.getItem("token") == undefined){
-      this.router.navigateByUrl("/login")
-    }
     this.cargarReservas();
   }
 

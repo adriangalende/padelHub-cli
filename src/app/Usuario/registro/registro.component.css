@@ -1,1 +1,55 @@
-/* No CSS *//*# sourceMappingURL=registro.component.css.map */
+.hidden {
+  display: none;
+}
+
+#registro {
+  margin: 0 auto;
+  background: url(/assets/img/back-login.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  width: 100%;
+  padding: 1rem;
+  min-width: 271px;
+}
+
+@media (orientation: portrait) and (max-width: 1024px) {
+  #registro {
+    height: 100%;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 768px) {
+  #registro {
+    height: 100%;
+  }
+}
+
+#registro .container {
+  height: 100%;
+}
+
+.row {
+  margin-right: -15px;
+  margin-left: -15px;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-pack: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+          align-items: center;
+  height: 100%;
+}
+
+.alert-registro {
+  margin: 2rem;
+}
+
+.logo {
+  width: 100%;
+}
+/*# sourceMappingURL=registro.component.css.map */

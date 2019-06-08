@@ -28,6 +28,6 @@ export class UsuarioService {
           token: token
         },
         {headers: this.headers}
-      ).pipe(map(data=>data)).pipe(share());
+      );
   }
 }
