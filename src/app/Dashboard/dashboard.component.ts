@@ -17,9 +17,9 @@ export class DashboardComponent implements OnInit {
     private router:Router,
     private clubService:ClubService) { }
 
-  private usuario:JwtResponse;
-  private esClub = false;
-  private esUsuario = false;
+  usuario:JwtResponse;
+  esClub = false;
+  esUsuario = false;
   nombreClub:string;
 
   ngOnInit() {

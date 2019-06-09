@@ -85,6 +85,7 @@ export class ReservarComponent implements OnInit {
   idBloqueo:number;
   descripcion:string;
   telefono:string;
+  showLoading = false;
 
   errorBusqueda:string;
 

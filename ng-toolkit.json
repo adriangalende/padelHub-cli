@@ -1,0 +1,13 @@
+{
+  "serverless": {
+    "provider": "aws",
+    "project": "padelHubClient",
+    "skipInstall": false,
+    "directory": ".",
+    "clientProject": "padelHubClient",
+    "serverless": {
+      "aws": {},
+      "gcloud": {}
+    }
+  }
+}
