@@ -230,7 +230,7 @@ export class ClubComponent implements OnInit {
         this._snackBar.open(data.message,"",{
           duration: 2000,
         });
-        event.srcElement.offsetParent.offsetParent.classList.add("hidden");
+       location.reload();
       },
       error => {
         this._snackBar.open(error.error.text,"",{
