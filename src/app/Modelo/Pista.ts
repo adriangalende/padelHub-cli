@@ -14,4 +14,5 @@ export class Pista{
     rutaImagenes?:String;
     duracion?:number;
     checkIn?:number;
+    descripcion?:String;
 }

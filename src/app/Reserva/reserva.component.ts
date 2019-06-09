@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ReservaService } from '../Service/reserva.service';
 import { Router } from '@angular/router';
 import { Pista } from '../Modelo/Pista';
-import { componentFactoryName } from '@angular/compiler';
-import { routerNgProbeToken } from '@angular/router/src/router_module';
 import { _localeFactory } from '@angular/core/src/application_module';
 
 

@@ -3,6 +3,7 @@ import {JwtResponse} from '../Modelo/JwtResponse';
 import {UsuarioService} from '../Service/usuario.service';
 import { Router } from '@angular/router';
 import { Usuario } from '../Modelo/Usuario';
+import { ClubService } from '../Service/club.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,11 +12,15 @@ import { Usuario } from '../Modelo/Usuario';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private usuarioService:UsuarioService, private router:Router) { }
+  constructor(
+    private usuarioService:UsuarioService, 
+    private router:Router,
+    private clubService:ClubService) { }
 
   private usuario:JwtResponse;
   private esClub = false;
   private esUsuario = false;
+  nombreClub:string;
 
   ngOnInit() {
       let token = sessionStorage.getItem("token");
@@ -25,7 +30,9 @@ export class DashboardComponent implements OnInit {
       } else {
          this.usuarioService.permisos(token).subscribe(item => {
             //redirigir a usuario según su rol
-            this.redirigirUsuario(JSON.parse(item["jwtUser"]));
+            let usr = JSON.parse(item["jwtUser"]);
+            this.redirigirUsuario(usr);
+            this.obtenerClub(usr.idClub)
         }); 
       }
     
@@ -34,7 +41,6 @@ export class DashboardComponent implements OnInit {
   
   redirigirUsuario(usr:JwtResponse):void{
     this.usuario = usr;
-    console.log(this.usuario)
     if(usr["role"] == "club"){
       this.esClub = true;
       this.esUsuario = false;
@@ -47,6 +53,12 @@ export class DashboardComponent implements OnInit {
   logout(){
     sessionStorage.clear();
     location.reload();
+  }
+
+  obtenerClub(idClub){
+    this.clubService.nombreClub(idClub).subscribe(item => {
+      this.nombreClub = item;
+  }); 
   }
 
 }

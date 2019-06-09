@@ -1,5 +1,24 @@
+
+.texto-logo
+    font-family: 'Rubik', sans-serif;
+    color: #fff;
+    font-size: 3rem;
+    font-weight: bold;
+    position: relative;
+    top: -50px;
+    margin: 0;
+
+.container
+    background-image: url('https://images.unsplash.com/photo-1526888935184-a82d2a4b7e67?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80')
+    width: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    position: absolute;
 mat-card
-    width: 300px;
+    max-width: 500px;
+    width: 100%;
+    padding: 2rem;
     text-align: center;
     display: flex;
     display: -webkit-flex;
@@ -10,7 +29,25 @@ mat-card
         display: flex;
         display: -webkit-flex;
         flex-wrap: nowrap;
+        -webkit-flex-wrap: nowrap;
+        justify-content: center;
+        -webkit-justify-content: center;
+    mat-card-header
+        margin: 0 auto;
+        display: block;
+        margin-bottom: 4rem;
 
 .precio
     font-size: 2rem;
     font-weight: bolder;
+.logo
+    width: 300px;
+
+.btn-login
+    position: fixed;
+    left: 0;
+    top: 2rem;
+    z-index: 100;
+    @media (min-width: 769px)
+        position: relative;
+        top: -2rem;

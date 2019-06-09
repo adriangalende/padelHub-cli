@@ -25,7 +25,6 @@ export class ReservaService {
     
     let url = this.ws + "reservar";
     
-    console.log(peticion)
     return this.http.post<Pista>(
       url, 
       { 
@@ -34,14 +33,14 @@ export class ReservaService {
         horaInicio: peticion.horaInicio,
         precio: peticion.precio,
         duracion: peticion.duracion,
-        idTipoReserva: peticion.id_tipo_reserva
+        idTipoReserva: peticion.id_tipo_reserva,
+        descripcion: peticion.descripcion
        },
       { headers: this.headers }
     );
   }
 
   recuperarReservas(): Observable<any>{
-    console.log("entro en recuperar las reservas del usuario");
     let url = this.ws + "misReservas";
     return this.http.post<Pista>(
       url,
@@ -51,7 +50,6 @@ export class ReservaService {
   }
 
   recuperarReservasClub(): Observable<any>{
-    console.log("entro en recuperarReservasClub");
     let url = this.ws + "reservas";
     return this.http.post<Pista>(
       url,
@@ -61,7 +59,6 @@ export class ReservaService {
   }
 
 recuperarTodasReservasClub(): Observable<any>{
-  console.log("entro en recuperarTODASReservasClub");
     let url = this.ws + "treservas";
     return this.http.post<Pista>(
       url,

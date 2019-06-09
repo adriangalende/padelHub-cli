@@ -1,10 +1,29 @@
 $gris: #2d2c2c;
 
+.container-header
+    background: url('https://images.unsplash.com/photo-1508147145048-f856f4af2fae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: inherit;
+    background-attachment: fixed;
+    margin-bottom: 1rem;
+    img
+        width: 300px;
+
+.container
+    width: 100%;
+    display: flex;
+    display: -webkit-flex;
+    @media (max-width:768px)
+        flex-direction: column;
+        -webkit-flex-direction: column;
+
 mat-card
     font-size: 64.5%;
     font-weight: bold;
     color: $gris;
     margin: 1rem;
+    width: 100%;
     @media (max-width: 1024px)
         font-size: 1.8rem;
 
@@ -73,7 +92,14 @@ mat-card
 .loading-img
     width: 200px;
 
-
+.btn-login
+    position: fixed;
+    left: 0;
+    top: 2rem;
+    z-index: 100;
+    @media (min-width: 769px)
+        position: relative;
+        top: -3rem;
     
     
 

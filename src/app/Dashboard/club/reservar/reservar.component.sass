@@ -5,16 +5,27 @@ mat-card
     font-weight: bold;
     color: $gris;
 
-.cdk-overlay-pane
-    width: auto;
+.reservar-pista
+    width: 100%;
+.panel-reserva
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    -webkit-justify-content: center;
+    display: -webkit-flex;
+    -webkit-flex-wrap: wrap;
+
+mat-checkbox
+    width: 100%;
+
 
 #timepicker
     ngb-timepicker
+        font-size: 2rem;
         fieldset
             .ngb-tp
                 .ngb-tp-spacer
                     margin: 1rem;
-                    color: red;
 
 .btn-group-toggle
     position: relative;
@@ -29,3 +40,6 @@ mat-card
         label
             width: 50px;
             margin: 0.4rem;
+
+.mat-form-field
+    width: 100%;

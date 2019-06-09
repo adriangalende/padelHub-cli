@@ -3,9 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgbTimeAdapter, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Validators, FormControl } from '@angular/forms';
 import { ReservaService } from 'src/app/Service/reserva.service';;
-import { PeticionPartida } from 'src/app/Modelo/PeticionPartida';
 import { Pista } from 'src/app/Modelo/Pista';
-import { TiposReserva } from 'src/app/Modelo/TiposReserva';
+
 
 export interface DialogData {
   pistas: any;
@@ -49,7 +48,10 @@ export class NgbTimeStringAdapter extends NgbTimeAdapter<string> {
 @Component({
   selector: 'app-reservar',
   templateUrl: './reservar.component.html',
-  styleUrls: ['./reservar.component.sass']
+  styleUrls: ['./reservar.component.sass'],
+  providers:[{
+    provide: NgbTimeAdapter, useClass: NgbTimeStringAdapter
+  }]
 })
 export class ReservarComponent implements OnInit {
 
@@ -81,8 +83,10 @@ export class ReservarComponent implements OnInit {
   tiposReserva:any;
   clubTieneBloqueo:boolean;
   idBloqueo:number;
+  descripcion:string;
+  telefono:string;
 
-  private moment = require("moment");
+  errorBusqueda:string;
 
   ngOnInit() {
     this.dateControl = new FormControl('', [Validators.required]);
@@ -96,11 +100,22 @@ export class ReservarComponent implements OnInit {
     this.obtenerTiposReserva(this.idClub);
 
     this.renderer.listen(this.elementRef.nativeElement, 'click', (evt) => {
-      if(evt.target.classList.contains("ngb-tp-chevron")){
-       // this.cambioHora();
+      if(evt.target.classList.contains("ngb-tp-chevron") || evt.target.classList.contains("bottom")){
+        this.cambioHora();
       }
     });
   }
+
+  public cambioHora(){
+    let hora = parseInt(this.time.split(":")[0]);
+    //Hora actual +1
+    let minHora = parseInt(this.moment(this.minDate).format("HH")) < 9 ? 9 : parseInt(this.moment(this.minDate).format("HH"));
+
+    if( hora <  minHora || hora > 22){
+      this.time = minHora+":00:00";
+    }
+
+  } 
   
   public controlHora(){
     if(this.moment(new Date()).isBefore(this.fecha["_d"])){
@@ -117,13 +132,15 @@ export class ReservarComponent implements OnInit {
     let partesFecha = fechaAux.split(" ");
     //El formato de fechas es siempre el mismo, y en el array debería ocupar el índice 4
     // Fri Jun 07 2019 18:56:47 GMT+0200 (hora de verano de Europa central)
-    console.log("hora " + hora.toString())
     partesFecha[4] = hora;
     
     return partesFecha.join(" ");
   }
 
+  moment = require('moment');
   reservar(idClub){
+      let puedeReservar = false;
+
       if(typeof this.time == "object"){
           this.time = new NgbTimeStringAdapter().toModel(this.time);
       }
@@ -136,13 +153,32 @@ export class ReservarComponent implements OnInit {
         this.reserva.id_tipo_reserva = this.idBloqueo;
       }
 
-      return this.reservaService.reservar(this.reserva).
-      subscribe(data => { 
-        console.log(data);
-      },
-      error => {
+      if(this.descripcion == undefined || this.descripcion == "" || ((this.telefono == undefined || this.telefono == "") && !this.bloqueo) || this.pistaSeleccionada == undefined){
+        this.errorBusqueda = "Es necesario rellenar el motivo de la reserva";
+      } else {
+        puedeReservar = true;
+        if(this.telefono == undefined){
+          this.telefono = "";
+        }
+        this.reserva.descripcion = this.descripcion +"#@"+this.telefono;
       }
-      )
+
+      if(puedeReservar){
+        return this.reservaService.reservar(this.reserva).
+        subscribe(data => { 
+          if(data.success != undefined){
+            this.errorBusqueda = data.message;
+          } else {
+            location.reload();
+          }
+        },
+        error => {
+          this.errorBusqueda = error.error;
+        }
+        )
+      } else {
+        this.errorBusqueda = "No se ha podido realizar la reserva, Revisa los campos del formulario";
+      }
   }
 
   private obtenerTiposReserva(idClub){
@@ -162,12 +198,12 @@ export class ReservarComponent implements OnInit {
       )
   }
 
+
   //Si el club tiene tipos de reserva, y una de ellas es bloqueo => true
   private clubPuedeBloquear():boolean{
     let flag = false;
     if(this.tiposReserva != undefined){
       this.tiposReserva.forEach(tipoReserva => {
-        console.log(tipoReserva.descripcion == "bloqueo")
         if(tipoReserva.descripcion == "bloqueo"){
            flag = true;
            this.idBloqueo = tipoReserva.id;

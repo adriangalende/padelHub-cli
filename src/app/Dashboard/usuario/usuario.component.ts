@@ -36,7 +36,6 @@ export class UsuarioComponent implements OnInit {
   mensaje:String;
   private cargarReservas(){
       this.reservaService.recuperarReservas().subscribe(data => {
-        console.log(data)
         if(data.success == undefined){
           this.listaReservas = data;
           this.proximasReservas = data.length;

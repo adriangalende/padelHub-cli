@@ -1,6 +1,5 @@
 <div [class.hidden]="!showLoading" class="loading-container"><mat-spinner></mat-spinner></div>
-<mat-card>
-  <mat-card-title><h1>Reservar pista</h1></mat-card-title>
+<mat-card class="panel-reserva">
   <mat-card-content>
     <mat-form-field>
       <input matInput [(ngModel)]="fecha" (ngModelChange)="controlHora()" placeholder="Fecha" [min]="minDate" [matDatepicker]="dateValid" disabled>
@@ -36,10 +35,15 @@
     <div [hidden]="!bloqueo" class="alert alert-warning"><fa name="danger"></fa> Si vas a bloquear una pista, asegúrate de que no haya pistas
       reservadas para este día en la pista a bloquear o se borrarán.
     </div>
-    
+    <mat-form-field class="motivo-reserva">
+        <input [(ngModel)]="descripcion" matInput placeholder="Nombre cliente, motivo bloqueo..." value="">
+    </mat-form-field>
+    <mat-form-field class="telefono-usuario">
+        <input [(ngModel)]="telefono" matInput placeholder="Teléfono del cliente" value="">
+    </mat-form-field>
     <hr>
-    <button (click)="reservar(data.idClub)" class="btn btn-lg btn-primary"> Reservar </button>
+    <button (click)="reservar(data.idClub)" class="reservar-pista btn btn-lg btn-primary"> Reservar </button>
   </mat-card-content>
 </mat-card>
 
-<mat-error >{{ errorBusqueda }}</mat-error>
+<p class="label-warning" *ngIf="errorBusqueda != undefined && errorBusqueda != ''">{{ errorBusqueda }}</p>

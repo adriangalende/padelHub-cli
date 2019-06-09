@@ -1,17 +1,17 @@
 
 <mat-toolbar>
-    <span *ngIf="usuario.role == 'club' || usuario.role == 'monitor'">
-        <img src="../../assets/img/logos/padel Go In.png" alt="">
+    <span class="logo" *ngIf="usuario != undefined && usuario.role != undefined && (usuario.role == 'club' || usuario.role == 'monitor')">
+        <img src="../../assets/img/logos/{{nombreClub.nombre}}.png" alt="">
         <small>Powered by PadelHub</small>
     </span>
 
-    <span *ngIf="usuario.role == 'usuario'">
-            <img src="" alt="PadelHubLogo">
-        </span>
+    <span class="logo" *ngIf="usuario != undefined && usuario.role == 'usuario'">
+            <img src="/assets/img/logos/PadelHub.png" alt="PadelHubLogo">
+    </span>
 
     <span class="example-spacer"></span>
     <div class="login-zone">
-        <span class="user"><fa name="user"></fa> {{usuario.username}}</span>&nbsp;
+        <span *ngIf="usuario != undefined" class="user"><fa name="user"></fa> {{usuario.username}}</span>&nbsp;
         <span (click)="logout()" class="logout btn btn-danger"><fa *ngIf="esClub || esUsuario" name="sign-out"></fa> Salir</span>
     </div>
 </mat-toolbar>

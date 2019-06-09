@@ -90,22 +90,16 @@ export class BuscarPistaComponent implements OnInit {
 
     let horaActual = moment(new Date()).format("HH")
     let hora = (parseInt(horaActual)+1) < 10 ? "0"+(parseInt(horaActual)+1):(parseInt(horaActual)+1);
-    this.time = hora+":00:00";
+    this.time = hora < "09" ? "09:00:00" : hora+":00:00";
     this.peticionPartida.horaInicio = this.time;
     this.peticionPartida.flexibilidad = 0;
     this.duracion = "90";
 
     this.renderer.listen(this.elementRef.nativeElement, 'click', (evt) => {
-      if(evt.target.classList.contains("ngb-tp-chevron")){
+      if(evt.target.classList.contains("ngb-tp-chevron") || evt.target.classList.contains("bottom")){
         this.cambioHora();
       }
     });
-
-    document.querySelectorAll(".ngb-tp-hour button").forEach(function(chrevron){
-      chrevron.addEventListener("click", e => {
-      
-      })
-  })
 
   }
 
@@ -114,11 +108,6 @@ export class BuscarPistaComponent implements OnInit {
   public controlHora(){
     if(moment(new Date()).isBefore(this.fecha["_d"])){
       this.time = "09:00:00";
-      let partesFecha = moment(this.fecha["_d"]).toString().split(" ");
-      partesFecha[4] =  "09:00:00";
-
-      this.minDate = new Date(partesFecha.join(" "));
-
     } else {
       let horaActual = moment(new Date()).format("HH")
       let hora = (parseInt(horaActual)+1) < 10 ? "0"+(parseInt(horaActual)+1):(parseInt(horaActual)+1);
@@ -132,11 +121,12 @@ export class BuscarPistaComponent implements OnInit {
   public cambioHora(){
     let hora = parseInt(this.time.split(":")[0]);
     //Hora actual +1
-    let minHora = parseInt(moment(this.minDate).format("HH"));
+    let minHora = parseInt(moment(this.minDate).format("HH")) < 9 ? 9 : parseInt(moment(this.minDate).format("HH"));
 
-    if( hora <=  minHora || hora >= 22){
+    if( hora <  minHora || hora > 22){
       this.time = minHora+":00:00";
     }
+
   }  
 
   buscarPartida(){
@@ -156,10 +146,12 @@ export class BuscarPistaComponent implements OnInit {
         this.errorBusqueda = undefined;
         this.listaPistas = this.organizarPistas(data);
         sessionStorage.setItem("dispoPistas", JSON.stringify(data));
-        this.showLoading = false;
       }
+      this.showLoading = false;
     },
-    error => console.log(error)
+    error => {
+      this.errorBusqueda = error.error;
+    }
     )
   
   }

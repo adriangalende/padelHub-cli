@@ -17,15 +17,17 @@
         <ng-container *ngIf="reserva.checkin == 0 && reserva.noShow == 0">
           <mat-card>
             <mat-card-header>
-              <mat-card-subtitle>{{ reserva.precio | currency:'EUR'}}</mat-card-subtitle>
+                {{reserva.horaInicio.split(" ")[0]}} - {{ reserva.nombreClub }}
             </mat-card-header>
             <mat-card-content>
-              <p>{{reserva.horaFin}}</p>
-              <p>{{reserva.duracion}}</p>
-              <p>{{reserva.precio}}</p>
+              <p><fa name="clock-o"></fa> {{reserva.horaInicio.split(" ")[1].slice(0,5)}} - {{reserva.horaFin.split(" ")[1]}}</p>
+              <p>{{reserva.duracion}} minutos</p>
+              <p class="precio">importe: {{reserva.precio | currency:'EUR'}}</p>
             </mat-card-content>
             <mat-card-actions>
-              <button *ngIf="reserva.checkin == 0 && reserva.noShow == 0" mat-button (click)="cancelar($event, reserva)" class="btn btn-lg btn-danger">borrar</button>
+              <button *ngIf="reserva.checkin == 0 && reserva.noShow == 0" mat-button (click)="cancelar($event, reserva)" class="btn btn-lg btn-danger">
+                <fa name="times"></fa> Cancelar reserva
+              </button>
             </mat-card-actions>
           </mat-card>
         </ng-container>
@@ -42,28 +44,31 @@
             </mat-expansion-panel-header>
         <ng-container *ngFor="let reserva of listaReservas; let i=index">
           <ng-container *ngIf="reserva.checkin == 1 || reserva.noShow == 1">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-subtitle>{{ reserva.precio | currency:'EUR'}}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <p>{{reserva.horaFin}}</p>
-                <p>{{reserva.duracion}}</p>
-                <p>{{reserva.precio}}</p>
-              </mat-card-content>
-              <div *ngIf="reserva.checkin == 1" class="alert alert-success">
-                  <i class="fa fa-check"></i> Partida verificada por el club
-              </div>
-              <div *ngIf="reserva.noShow == 1" class="alert alert-danger">
-                  El club ha marcado la partida como no presentado :(
-            </div>
-            </mat-card>
+              <mat-card>
+                  <mat-card-header>
+                      {{reserva.horaInicio.split(" ")[0]}} - {{ reserva.nombreClub }}
+                  </mat-card-header>
+                  <mat-card-content>
+                    <p><fa name="clock-o"></fa> {{reserva.horaInicio.split(" ")[1].slice(0,5)}} - {{reserva.horaFin.split(" ")[1]}}</p>
+                    <p>{{reserva.duracion}} minutos</p>
+                    <p class="precio">importe: {{reserva.precio | currency:'EUR'}}</p>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <button *ngIf="reserva.checkin == 0 && reserva.noShow == 0" mat-button (click)="cancelar($event, reserva)" class="btn btn-lg btn-danger">borrar</button>
+                  </mat-card-actions>
+                  <div *ngIf="reserva.checkin == 1" class="alert alert-success">
+                      <i class="fa fa-check"></i> Partida verificada por el club
+                  </div>
+                  <div *ngIf="reserva.noShow == 1" class="alert alert-danger">
+                      El club ha marcado la partida como no presentado :(
+                </div>
+              </mat-card>
           </ng-container>
         </ng-container>
         </mat-expansion-panel>
     </mat-accordion>  
-  <mat-error *ngIf="mensaje != undefined">
+  <p class="mensaje label label-primary" *ngIf="mensaje != undefined">
     {{mensaje}}
-  </mat-error>
+  </p>
 </div>
 

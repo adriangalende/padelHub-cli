@@ -3,7 +3,7 @@
     <div id="agenda">
       <div class="controlFecha">
         <span class="diamenos" (click)="cambiarDia(0)">&lt;</span>
-        <span>{{currentDate | date:'dd/MM/yyyy'}}</span>
+        <span>{{currentDate | date:'dd/MM/yyyy'}} <small (click)="cambiarDiaHoy()" *ngIf="!esHoy(currentDate)" class="badge badge-primary">ir a hoy</small></span>
         <span class="diamas" (click)="cambiarDia(1)">&gt;</span></div>
       <mat-tab-group>
         <ng-container *ngFor="let pista of listaPistas">
@@ -17,9 +17,10 @@
                     <mat-card-content>
                         <p *ngIf="idBloqueo != reserva.idTipoReserva ">
                             <fa *ngIf="reserva.noShow == 1" name="exclamation-triangle"></fa>
-                           {{ reserva.nombreUsuario}} <span class="badge badge-info">{{reserva.tipoUsuario}}</span>
-                          </p>
-                        <p *ngIf="idBloqueo == reserva.idTipoReserva"> Bloqueo pista <span class="badge badge-info">{{reserva.tipoUsuario}}</span></p>
+                           {{ datosUsuarioLlamada(reserva.descripcion,'nombre') || reserva.nombreUsuario}} <span *ngIf="reserva.descripcion == null || reserva.descripcion == undefined || reserva.descripcion == ''" class="badge badge-info">{{reserva.tipoUsuario}}</span>
+                        </p>
+                        <p *ngIf="reserva.noShow == 1"><fa name="phone" size="lg" rotate="90"></fa>&nbsp;{{ datosUsuarioLlamada(reserva.descripcion,'telefono') || reserva.telefonoUsuario}}</p>
+                        <p *ngIf="idBloqueo == reserva.idTipoReserva"> Bloqueo pista <strong>{{datosUsuarioLlamada(reserva.descripcion,'nombre')}}</strong> <span *ngIf="reserva.descripcion == null || reserva.descripcion == undefined || reserva.descripcion == ''" class="badge badge-info">{{reserva.tipoUsuario}}</span></p>
                         <p> <fa name="clock-o"></fa>  {{ reserva.horaInicio | date: 'HH:mm' }} - {{  reserva.horaFin | date: 'HH:mm' }} </p>
                       </mat-card-content>
                     </mat-card>
@@ -47,7 +48,7 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                           <h3>{{reserva.horaInicio | date:'HH:mm'}}
-                            - {{ reserva.nombrePista}} - {{reserva.nombreUsuario}}
+                            - {{ reserva.nombrePista}} - {{ datosUsuarioLlamada(reserva.descripcion,'nombre')  || reserva.nombreUsuario}}
                             <fa *ngIf="reserva.checkin == 1" name="check"></fa>
                             <fa matTooltip="Los usuarios no se han presentado o no han pagado la reserva" matTooltipClass="example-tooltip-red" *ngIf="reserva.noShow == 1" name="exclamation-triangle"></fa>
                           </h3>
@@ -56,8 +57,8 @@
                     <mat-card [class.pagada]="reserva.checkin == 1" [class.noShow]="reserva.noShow == 1">
                       <mat-card-content>
                         <p><strong>{{reserva.nombrePista}}</strong></p>
-                        <p> {{reserva.nombreUsuario}} <span class="badge badge-info">{{reserva.tipoUsuario}}</span></p>
-                        <p><fa name="phone" size="lg" rotate="90"></fa>&nbsp;{{reserva.telefonoUsuario}}</p>
+                        <p> {{ datosUsuarioLlamada(reserva.descripcion, 'nombre') || reserva.nombreUsuario}} <span *ngIf="reserva.descripcion == null || reserva.descripcion == undefined || reserva.descripcion == ''" class="badge badge-info">{{reserva.tipoUsuario}}</span></p>
+                        <p><fa name="phone" size="lg" rotate="90"></fa>&nbsp;{{ datosUsuarioLlamada(reserva.descripcion, 'telefono') || reserva.telefonoUsuario}}</p>
                         <p>{{reserva.duracion}} minutos</p>
                         <p>{{ reserva.precio | currency:'EUR'}}</p>
                         <p *ngIf="reserva.checkin == 0 && reserva.noShow == 0">

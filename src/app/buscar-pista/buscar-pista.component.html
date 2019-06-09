@@ -1,7 +1,10 @@
 <div [class.hidden]="!showLoading" class="loading-container">
   <mat-spinner></mat-spinner>
 </div>
-
+<div class="container-header">
+    <img src="/assets/img/padelHub-w.png" alt="padelhub">
+</div>
+  <a class="btn-login btn btn-primary" href="/dashboard"><fa size="2x" name="user-circle"></fa></a>
 <div class="container w-100">
   <mat-card>
     <mat-card-title><h1>Buscar partida!</h1></mat-card-title>
@@ -43,10 +46,8 @@
       <hr>
       <button (click)="buscarPartida()" class="btn btn-lg btn-primary"> Buscar </button>
     </mat-card-content>
+    <mat-error style="font-size:2rem;">{{ errorBusqueda }}</mat-error>
   </mat-card>
-
-  <mat-error >{{ errorBusqueda }}</mat-error>
-
   <mat-accordion *ngIf="listaPistas != undefined">
     <ng-container *ngFor="let club of obtenerClubes(listaPistas)">
       <mat-expansion-panel>

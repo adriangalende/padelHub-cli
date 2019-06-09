@@ -68,6 +68,7 @@ export class ClubComponent implements OnInit {
         } else {
           this.mensaje = data.message;
         }
+        this.showLoading = false;
     });
 
     this.reservaService.recuperarTodasReservasClub().subscribe(data => {
@@ -79,6 +80,7 @@ export class ClubComponent implements OnInit {
       } else {
         this.mensaje = data.message;
       }
+      this.showLoading = false;
   }); 
 
 
@@ -143,7 +145,17 @@ export class ClubComponent implements OnInit {
     }
     this.currentDate = momentum.toDate();
     this.reservasDia = this.listaTodasReservas[momentum.format("DD/MM/YYYY")];
-    console.log(this.reservasDia)
+  }
+
+  cambiarDiaHoy(){
+    this.currentDate = new Date();
+  }
+
+  esHoy(currentDate):boolean{
+      if(moment(new Date()).isBefore(currentDate) || moment(new Date()).isAfter(currentDate)){
+        return false;
+      }
+      return true;
   }
 
   openDialog():void{
@@ -154,11 +166,25 @@ export class ClubComponent implements OnInit {
         idClub: this.listaPistas[0].idClub
       }
     });
+  }
 
-    
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+  /**
+   * Obtenemos los datos del usuarios que ha realizado la reserva por vía telefónica
+   * @param descripcion 
+   * @param campo 
+   */
+  public datosUsuarioLlamada(descripcion, campo):string{
+    if(descripcion != undefined && descripcion != null){
+      let partesDescripcion = descripcion.split("#@")
+      if(partesDescripcion.length >= 1 && campo == "nombre"){
+         return partesDescripcion[0];
+      } else if (partesDescripcion.length == 2 && campo == "telefono"){
+        return partesDescripcion[1];
+      } else{
+        //no hacemos nada porque al final ya devolvemos null;
+      }
+    }
+      return null
   }
 
   //Los usuarios se han presentado a la partida y han abonado el dinero
@@ -169,6 +195,7 @@ export class ClubComponent implements OnInit {
           duration: 2000,
         });
         reserva.checkIn = 1;
+        location.reload();
       },
       error => {
         this._snackBar.open(error.error.text,"",{
@@ -186,6 +213,7 @@ export class ClubComponent implements OnInit {
             duration: 2000,
           });
           reserva.checkIn = 1;
+          location.reload();
         },
         error => {
           this._snackBar.open(error.error.text,"",{
@@ -210,6 +238,10 @@ export class ClubComponent implements OnInit {
         });
       }
     )
+  }
+
+  public numeroAleatorio():string{
+    return (Math.floor(Math.random() * 6) + 1).toString();
   }
 
 }
