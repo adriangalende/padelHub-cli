@@ -96,38 +96,47 @@ export class ReservarComponent implements OnInit {
     this.time = hora+":00:00";
     this.duracion = "90";
     this.idClub = this.data.idClub;
+    this.controlHora()
 
     //Obtenemos los tipos de reserva para ver si el club tiene bloqueo de pista
     this.obtenerTiposReserva(this.idClub);
 
     this.renderer.listen(this.elementRef.nativeElement, 'click', (evt) => {
-      if(evt.target.classList.contains("ngb-tp-chevron") || evt.target.classList.contains("bottom")){
+      if(evt.target.classList.contains("ngb-tp-chevron") || evt.target.classList.contains("bottom") || evt.target.classList.contains("ng-star-inserted")){
         this.cambioHora();
       }
     });
   }
 
+  public controlHora(){
+    let partesFecha;
+    if(this.moment(new Date()).isBefore(this.fecha["_d"])){
+      this.time = "09:00:00";
+      partesFecha = this.moment(new Date()).toString().split(" ");
+      partesFecha[4] =  "09:00:00";
+    } else {
+      let horaActual = this.moment(new Date()).format("HH")
+      let hora = (parseInt(horaActual)+1) < 10 ? "0"+(parseInt(horaActual)+1):(parseInt(horaActual)+1);
+      this.time = hora+":00:00";
+      partesFecha = this.moment(new Date()).toString().split(" ");
+      partesFecha[4] =  hora+":00:00";
+    }
+       this.minDate = new Date(partesFecha.join(" "));
+  }
+
+  /**
+   * Al realizar cambios en la selección de hora
+   */
   public cambioHora(){
     let hora = parseInt(this.time.split(":")[0]);
     //Hora actual +1
-    let minHora = parseInt(this.moment(this.minDate).format("HH")) < 9 ? 9 : parseInt(this.moment(this.minDate).format("HH"));
+    let minHora = parseInt(this.moment(this.minDate).format("HH"));
 
     if( hora <  minHora || hora > 22){
       this.time = minHora+":00:00";
     }
 
-  } 
-  
-  public controlHora(){
-    if(this.moment(new Date()).isBefore(this.fecha["_d"])){
-      this.time = "09:00:00";
-    } else {
-      let horaActual = this.moment(new Date()).format("HH")
-      let hora = (parseInt(horaActual)+1) < 10 ? "0"+(parseInt(horaActual)+1):(parseInt(horaActual)+1);
-      this.time = hora+":00:00";
-    }
-  }
-
+  }  
   private adaptarFechaHora(fecha, hora):string{
     let fechaAux = fecha.toString();
     let partesFecha = fechaAux.split(" ");

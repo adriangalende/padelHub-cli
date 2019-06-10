@@ -94,9 +94,11 @@ export class BuscarPistaComponent implements OnInit {
     this.peticionPartida.horaInicio = this.time;
     this.peticionPartida.flexibilidad = 0;
     this.duracion = "90";
+    this.controlHora();
 
     this.renderer.listen(this.elementRef.nativeElement, 'click', (evt) => {
-      if(evt.target.classList.contains("ngb-tp-chevron") || evt.target.classList.contains("bottom")){
+      console.log(evt.target)
+      if(evt.target.classList.contains("ngb-tp-chevron") || evt.target.classList.contains("bottom") || evt.target.classList.contains("ng-star-inserted")){
         this.cambioHora();
       }
     });
@@ -106,13 +108,19 @@ export class BuscarPistaComponent implements OnInit {
 
 
   public controlHora(){
+    let partesFecha;
     if(moment(new Date()).isBefore(this.fecha["_d"])){
       this.time = "09:00:00";
+      partesFecha = moment(new Date()).toString().split(" ");
+      partesFecha[4] =  "09:00:00";
     } else {
       let horaActual = moment(new Date()).format("HH")
       let hora = (parseInt(horaActual)+1) < 10 ? "0"+(parseInt(horaActual)+1):(parseInt(horaActual)+1);
       this.time = hora+":00:00";
+      partesFecha = moment(new Date()).toString().split(" ");
+      partesFecha[4] =  hora+":00:00";
     }
+       this.minDate = new Date(partesFecha.join(" "));
   }
 
   /**
@@ -121,7 +129,7 @@ export class BuscarPistaComponent implements OnInit {
   public cambioHora(){
     let hora = parseInt(this.time.split(":")[0]);
     //Hora actual +1
-    let minHora = parseInt(moment(this.minDate).format("HH")) < 9 ? 9 : parseInt(moment(this.minDate).format("HH"));
+    let minHora = parseInt(moment(this.minDate).format("HH"));
 
     if( hora <  minHora || hora > 22){
       this.time = minHora+":00:00";

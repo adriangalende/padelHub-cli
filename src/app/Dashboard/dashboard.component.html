@@ -1,11 +1,11 @@
 
 <mat-toolbar>
-    <span class="logo" *ngIf="usuario != undefined && usuario.dataUser.role != undefined && (usuario.dataUser.role == 'club' || usuario.dataUser.role == 'monitor')">
-        <img src="../../assets/img/logos/{{nombreClub.nombre}}.png" alt="">
+    <span class="logo" *ngIf="usuario != undefined && usuario.role != undefined && (usuario.role == 'club' || usuario.role == 'monitor')">
+        <img *ngIf="nombreClub != undefined "src="../../assets/img/logos/{{nombreClub.nombre}}.png" alt="">
         <small>Powered by PadelHub</small>
     </span>
 
-    <span class="logo" *ngIf="usuario != undefined && usuario.dataUser.role == 'usuario'">
+    <span class="logo" *ngIf="usuario != undefined && usuario.role == 'usuario'">
             <img src="/assets/img/logos/PadelHub.png" alt="PadelHubLogo">
     </span>
 
